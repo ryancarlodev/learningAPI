@@ -5,7 +5,7 @@ FROM python:3.12-slim
 WORKDIR /app
 
 # Instala as dependencias do sistema
-RUN apt-get update && apt-get install -y --no-install-recommends curl && rm - rf /var/lib/at/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
 
 # Copia arquivos de requisistos
 COPY requirements.txt .
@@ -20,4 +20,4 @@ COPY . .
 EXPOSE 8000
 
 # Comando para rodar a aplicacao quando o container iniciar
-CMD ["uvicorn", "min:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
