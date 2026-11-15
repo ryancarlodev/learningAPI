@@ -10,35 +10,36 @@ class MediaItem(BaseModel):
 
 @app.get("/")
 def read_root():
-    return {"status": "server backend running in successful the Ubuntu via SSH and Docker!"}
+    return {"status": "Backend running successfully on Ubuntu via SSH and Docker!"}
 
 @app.get("/verify-volume")
 def verify_volume():
     exists = os.path.exists(VOLUME_PATH)
     return {
         "volume": VOLUME_PATH,
-        "avaible": exists
+        "available": exists
     }
 
 @app.post("/medias/")
 def create_midia(item: MediaItem):
     '''
-    Receives a media item validate by pydantic and saves it in a JSON file inside the Docker
-    volume (/data).
+    Receives a media item validatd by Pydantic and saves it in a JSON file inside the Docker
+    volume (/dados).
     '''
     try:
-        # 1. Transformate a object for dicionary (serialization in memory)
+        # 1. Convert an object to a dictionary (serialization in memory)
         item_dict = item.model_dump()
 
-        # 2. Learning the actualy state by amarzening persisty
+        # 2. Checking the current state of persistent storage
         data_existing = []
+
         if os.path.exists(ARCHIVE_DATA):
             with open(ARCHIVE_DATA, "r", encoding="utf-8") as archive:
                 try:
-                    # The intepretor lear a stream for bytes in disco e reconstroi the list in python
+                    # The interpreter reads a stream of bytes from disk and rebuilds the list in Python
                     data_existing = json.load(archive)
                 except json.JSONDecodeError:
-                    # Tratamento para archive corrompido empty (evita crash for API)
+                    # Handling for corrupted or empty files (prevents API crashes)
                     data_existing = []
 
         # 3. Mutarion structure the data in RAM
